@@ -4,9 +4,13 @@ import java.util.*;
 
 public class User 
 {
+	public String UserLogin;
+	public String UserName;
+	
 	public User()
 	{
-		
+		UserLogin = "";
+		UserName = "";
 	}
 	
 	/*
@@ -35,6 +39,51 @@ public class User
 	                System.err.println(e.getMessage());
 			throw(e);
 		}
+	}
+	
+	public void UserLogin(Scanner scan, Connector Con) throws Exception
+	{
+		String login;
+		String password;
+		
+		System.out.println("Type in your login and return.");
+		login = scan.next();
+		
+		System.out.println("Type in you password and return");
+		password = scan.next();
+		
+		try
+		{
+			SqlLogin(Con,login,password);
+		}
+		catch(Exception e)
+		{
+			throw(e);
+		}
+		
+	}
+	
+	public void SqlLogin(Connector Con, String Login, String Password) throws Exception
+	{
+		/* select count(1)
+			from table
+			where key = value;*/
+		String query;
+		ResultSet results;
+		query = "SELECT * FROM Users WHERE Login = '"+Login+"' AND Password = '"+Password+"';";
+		try{
+			results = Con.stmt.executeQuery(query);
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+		 
+		while(results.next())
+		{
+			UserName = results.getString("Name");
+		}
+		
 	}
 	
 	
