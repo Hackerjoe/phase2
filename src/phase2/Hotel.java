@@ -15,13 +15,13 @@ public class Hotel
 		Category = scan.next();
 		System.out.println("Type in Name of hotel.");
 		Name = scan.next();
-		System.out.print("Type in Address of hotel.");
+		System.out.print("Type in Address of hotel: ");
 		Address = scan.next();
-		System.out.print("\nType in URL of hotel.");
+		System.out.print("\nType in URL of hotel: ");
 		URL = scan.next();
-		System.out.print("\nType in phone number of hotel.");
+		System.out.print("\nType in phone number of hotel: ");
 		PhoneNumber = scan.next();
-		System.out.print("\nType in year of hotel.");
+		System.out.print("\nType in year of hotel: ");
 		Year = scan.next();
 		try {
 			SQLCreateHotel(Category,Name,Address,URL,PhoneNumber,Year,CurrentUser,con);

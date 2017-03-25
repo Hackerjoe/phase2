@@ -12,23 +12,31 @@ public class LoggedMenu
 	
 	public void ShowMenu(Connector con, Scanner scan)
 	{
-		System.out.println("You are logged in as " + this.CurrentUser.UserName+".");
-		System.out.println("--Options--");
-		System.out.println("1) Make Reservation.");
-		System.out.println("2) Create Hotel.");
-		
-		int option = scan.nextInt();
-		
-		if(option == 1)
+		int option = -1;
+		while(option != 0)
 		{
+			System.out.println("You are logged in as " + this.CurrentUser.UserName+".");
+			System.out.println("--Options-- (Type 0 (zero) to go back)");
+			System.out.println("1) Find Hotel");
+			System.out.println("2) Create Hotel.");
 			
-		}
-		if(option == 2)
-		{
-			try {
-				Hotel.CreateHotel(scan, con, CurrentUser);
-			} catch (Exception e) {
-				System.out.println("Unable to create hotel!");
+			
+			
+			option = scan.nextInt();
+			
+			if(option == 1)
+			{
+				FindHotelMenu menu = new FindHotelMenu();
+				menu.ShowMenu(con, scan);
+				
+			}
+			if(option == 2)
+			{
+				try {
+					Hotel.CreateHotel(scan, con, CurrentUser);
+				} catch (Exception e) {
+					System.out.println("Unable to create hotel!");
+				}
 			}
 		}
 	}
