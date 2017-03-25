@@ -20,6 +20,7 @@ public class HousePage extends Page {
     	System.out.println("Choose option for hotel. (type 0 to go back)");
 		System.out.println("1) Reserve hotel.");
 		System.out.println("2) Check dates.");
+		System.out.println("3) Add Vists");
 
 		option = scanner.nextInt();
 		
@@ -35,6 +36,10 @@ public class HousePage extends Page {
 			} catch (Exception e) {
 				System.out.println("Unable to find dates.");
 			}
+		}
+		if(option == 3)
+		{
+			
 		}
     }
     

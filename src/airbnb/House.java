@@ -52,6 +52,65 @@ class House {
         
     }
     
+    static void getHouseOwnBy(String Login, Connector con) throws Exception
+    {
+    	  String query;
+          ResultSet results;
+          query = "select * from THs where Login = '"+Login+"';";
+          try{
+              results = con.stmt.executeQuery(query);
+          } catch(Exception e) {
+              System.err.println("Unable to execute query:"+query+"\n");
+              System.err.println(e.getMessage());
+              throw(e);
+          }
+          
+          String resultString = "";
+          if(!results.isBeforeFirst())
+          {
+              System.out.println("You own zero houses.");
+          }
+          while(results.next())
+          {
+              resultString += "House id: ";
+              resultString += results.getString("hid") + "\n";
+              
+              resultString += "Name: ";
+              resultString += results.getString("Name") + "\n";
+              
+              resultString += "Address: ";
+              resultString += results.getString("Address") + "\n\n";
+           
+              
+          }
+          System.out.println(resultString);
+    }
+    
+    
+    static String GetHouseNameByHid(int hid, Connector con) throws Exception
+    {
+    	  String query;
+          ResultSet results;
+          query = "select * from THs where hid = '"+hid+"';";
+          try{
+              results = con.stmt.executeQuery(query);
+          } catch(Exception e) {
+              System.err.println("Unable to execute query:"+query+"\n");
+              System.err.println(e.getMessage());
+              throw(e);
+          }
+          
+          String resultString = "";
+          if(!results.isBeforeFirst())
+          {
+              return "NAH";
+          }
+          results.next();
+          return results.getString("Name");
+
+    }
+    
+    
 	static void GetAvailableDates(Connector con, int HotelId) throws Exception
 	{
 		String query;

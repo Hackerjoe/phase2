@@ -123,4 +123,96 @@ public class User
         }
         
     }
+    
+    public static List<Reserve> getReserves(String Login,Connector con) throws Exception
+    {
+    	//select * from Reserve where Login = 'joeyDD';
+    	String query;
+        ResultSet results;
+        query = "select * from Reserve where Login = '"+Login+"';";
+        try{
+            results = con.stmt.executeQuery(query);
+        } catch(Exception e) {
+            System.err.println("Unable to execute query:"+query+"\n");
+            System.err.println(e.getMessage());
+            throw(e);
+        }
+        if(!results.isBeforeFirst())
+        {
+            return null;
+        }
+        List<Reserve> newList = new ArrayList<Reserve>();
+        while(results.next())
+        {
+        	Reserve res = new Reserve();
+        	res.cost = results.getFloat("cost");
+        	res.hid = results.getInt("hid");
+        	res.pid = results.getInt("pid");
+        	newList.add(res);
+        }
+        
+    	return newList;
+    }
+    
+    public static void addVisit(float cost, String Login, int hid, int pid, Connector con) throws Exception
+    {
+    	String query;
+		query= "insert into Visits (cost,Login,hid,pid) values (?,?,?,?);";
+		try
+		{
+			  PreparedStatement preparedStmt = con.con.prepareStatement(query);
+			  preparedStmt.setFloat(1, cost);
+			  preparedStmt.setString(2,Login);
+		      preparedStmt.setInt(3,hid);
+		      preparedStmt.setInt(4,pid);
+		      preparedStmt.execute();
+		}
+		catch(Exception e)
+		{
+			System.err.println("Unable to execute query:"+query+"\n");
+            System.err.println(e.getMessage());
+            throw(e);
+		}
+    }
+    
+    public static void printVisits(String Login, Connector con) throws Exception
+    {
+    	String query;
+        ResultSet results;
+        query = "select * from Visits where Login = '"+Login+"';";
+        try{
+            results = con.stmt.executeQuery(query);
+        } catch(Exception e) {
+            System.err.println("Unable to execute query:"+query+"\n");
+            System.err.println(e.getMessage());
+            throw(e);
+        }
+        if(!results.isBeforeFirst())
+        {
+            System.out.println("No Visits.");
+        }
+        List<Visit> visits = new ArrayList<Visit>();
+        while(results.next())
+        {
+            int hid = results.getInt("hid");
+        	float cost = results.getFloat("cost");
+        	int pid = results.getInt("pid");
+        	Visit newVisit = new Visit();
+        	newVisit.cost = cost;
+        	newVisit.hid = hid;
+        	newVisit.pid = pid;
+        	newVisit.Login = Login;
+        	visits.add(newVisit);
+        }
+        
+        for(Visit v : visits)
+        {
+        	String hidName = House.GetHouseNameByHid(v.hid, con);
+	    	System.out.println("--> Hid: "+v.hid + " Name: " + hidName +" Cost: " + v.cost);
+	    	Period period = House.getPeriod(v.pid, con);
+	    	System.out.println("From: "+period.start+" To:" + period.end);
+        }
+    }
+    
+    
 }
