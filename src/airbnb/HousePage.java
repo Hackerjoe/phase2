@@ -25,7 +25,7 @@ public class HousePage extends Page {
 		
 		if(option == 1)
 		{
-			
+			ReserveHotel(app.connection,this.scanner);
 		}
 		if(option == 2)
 		{
@@ -58,7 +58,10 @@ public class HousePage extends Page {
 				ed = formatter.parse(EndDate);
 				int daysBetween = (int)( (ed.getTime() - sd.getTime()) / (1000 * 60 * 60 * 24) );
 				if(daysBetween <= 0)
-					System.out.println("Those dates do not work.");   
+					System.out.println("Those dates do not work.");
+				float cost = PPN * daysBetween;
+				println("Cost would be: $"+cost);
+				House.SQLReserveDate(con, StartDate, EndDate, cost, this.app.getCurrentUser().login, this.Hid);
 			}
 			else
 			{
@@ -66,6 +69,7 @@ public class HousePage extends Page {
 			}
 		} catch (Exception e) {
 			System.out.println("Unable to reserve dates. =(");
+	           System.err.println(e.getMessage());
 		}
 	}
 	
