@@ -40,6 +40,8 @@ public class MainMenu
 					User loginUser = new User();
 					loginUser.UserLogin(scan, con);
 					System.out.println("Welcome "+loginUser.UserName+".");
+					LoggedMenu menu = new LoggedMenu(loginUser);
+					menu.ShowMenu(con, scan);
 				}
 				catch(Exception e)
 				{

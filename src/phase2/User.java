@@ -17,7 +17,7 @@ public class User
 	* This inserts a new user into the user table.
 	* It will throw an exception if the login is the same as another user.
 	*/
-	public void InsertUser(String Name, String Login, int type, String Password, String Address, String PhoneNumber, Connector con) throws Exception
+	static public void InsertUser(String Name, String Login, int type, String Password, String Address, String PhoneNumber, Connector con) throws Exception
 	{
 		//INSERT INTO Users (Name, Login, userType, Password, Address, PhoneNumber) VALUES ('Joey Despain','Jdlog','0','password','123 street','5556666');
 		String query;
@@ -121,6 +121,16 @@ public class User
 			throw(e);
 			
 		}
+		
+	}
+	
+	public void CreateReservation(Scanner scan, Connector con)
+	{
+		
+	}
+	
+	public void SQLCreateReservation()
+	{
 		
 	}
 }
