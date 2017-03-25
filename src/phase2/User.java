@@ -78,10 +78,16 @@ public class User
 	                System.err.println(e.getMessage());
 			throw(e);
 		}
-		 
+		if(!results.isBeforeFirst())
+		{
+			Exception e = new Exception("Wrong username or password");
+			throw(e);
+		}
 		while(results.next())
 		{
 			UserName = results.getString("Name");
+			UserLogin = results.getString("Login");
+			
 		}
 		
 	}

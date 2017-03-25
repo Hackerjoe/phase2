@@ -8,7 +8,7 @@ public class Hotel
 		
 	}
 	
-	static void CreateHotel(Scanner scan, Connector con, User CurrentUser)
+	static void CreateHotel(Scanner scan, Connector con, User CurrentUser) throws Exception
 	{
 		String Category,Name,Address,URL,PhoneNumber,Year;
 		System.out.println("Type in category of hotel.");
@@ -16,13 +16,18 @@ public class Hotel
 		System.out.println("Type in Name of hotel.");
 		Name = scan.next();
 		System.out.print("Type in Address of hotel.");
-		Address = scan.nextLine();
+		Address = scan.next();
 		System.out.print("\nType in URL of hotel.");
-		URL = scan.nextLine();
+		URL = scan.next();
 		System.out.print("\nType in phone number of hotel.");
-		PhoneNumber = scan.nextLine();
+		PhoneNumber = scan.next();
 		System.out.print("\nType in year of hotel.");
 		Year = scan.next();
+		try {
+			SQLCreateHotel(Category,Name,Address,URL,PhoneNumber,Year,CurrentUser,con);
+		} catch (Exception e) {
+			throw(e);
+		}
 		
 	}
 	
@@ -32,17 +37,17 @@ public class Hotel
 	{
 		String query;
 
-		query= "INSERT INTO THs (Category, Name, Address, URL, PhoneNumber, Year, Login) "+"VALUES (?, ?, ?, ?, ?,?,?)";
+		query= "INSERT INTO THs (Category, Name, Address, URL, PhoneNumber, Year, Login) "+"VALUES (?, ?, ?, ?, ?,?,?);";
 		
 		try{
 			  PreparedStatement preparedStmt = con.con.prepareStatement(query);
 			  preparedStmt.setString (1, Category);
 		      preparedStmt.setString (2, Name);
-		      preparedStmt.setString (2, Address);
+		      preparedStmt.setString (3, Address);
 		      preparedStmt.setString(4, URL);
 		      preparedStmt.setString(5, PhoneNumber);
 		      preparedStmt.setString(6, Year);
-		      preparedStmt.setString(6, CurrentUser.UserLogin);
+		      preparedStmt.setString(7, CurrentUser.UserLogin);
 		      preparedStmt.execute();
 			 
         } catch(Exception e) {

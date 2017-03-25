@@ -25,7 +25,11 @@ public class LoggedMenu
 		}
 		if(option == 2)
 		{
-			Hotel.CreateHotel(scan, con, CurrentUser);
+			try {
+				Hotel.CreateHotel(scan, con, CurrentUser);
+			} catch (Exception e) {
+				System.out.println("Unable to create hotel!");
+			}
 		}
 	}
 }
