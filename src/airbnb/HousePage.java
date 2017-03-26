@@ -2,7 +2,9 @@ package airbnb;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -20,7 +22,11 @@ public class HousePage extends Page {
     	System.out.println("Choose option for hotel. (type 0 to go back)");
 		System.out.println("1) Reserve hotel.");
 		System.out.println("2) Check dates.");
-		System.out.println("3) Add Vists");
+		System.out.println("3) Give feedback.");
+		println("4) See feedback on this hotel");
+		println("5) Rate feedback");
+		println("6) set as favorite.");
+		
 
 		option = scanner.nextInt();
 		
@@ -39,7 +45,77 @@ public class HousePage extends Page {
 		}
 		if(option == 3)
 		{
-			
+			this.CreateFeedback();
+		}
+		if(option == 4)
+		{
+			this.seeFeeback();
+		}
+		if(option == 5)
+		{
+			scoreFeedback();
+		}
+		if(option == 6)
+		{
+			try {
+				User.setHouseAsFavorite(app.connection, this.Hid,app.getCurrentUser().login);
+				println("This hotel has been set as one of your favorites");
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+    }
+    
+    public void scoreFeedback()
+    {
+    	println("Enter the feedback id (fid)");
+    	int fid = scanner.nextInt();
+    	int score = -1;
+    	while(score < 0 || score > 2)
+    	{
+    		println("Please enter a score for this feeback between 0-2");
+    		score = scanner.nextInt();
+    	}
+    	try {
+			User.RateFeedback(app.connection, fid, app.getCurrentUser().login, score);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    }
+    
+    public void seeFeeback()
+    {
+    	List<FeedBack> feeds= new ArrayList<FeedBack>();
+    	try {
+			feeds = House.getFeedBackForHouse(app.connection, this.Hid);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
+    	for(FeedBack feed : feeds)
+    	{
+    		println("--> FID: "+feed.fid+" User: "+feed.Login+" Score: " +feed.score);
+    		println("Message: " + feed.message);
+    	}
+    }
+    
+    public void CreateFeedback()
+    {
+    	int score = -1;
+    	while(score < 0 || score > 10)
+    	{
+    		println("Give a score from 0 - 10");
+    		score = scanner.nextInt();
+    	}
+    	System.out.print("Write an optional message for the house : ");
+    	String message = scanner.next();
+    	try {
+			House.CreateFeedBack(app.connection, app.getCurrentUser().login, this.Hid, message, score);
+		} catch (Exception e) {
+			println("-----------You have already created feedback.-----------------");
 		}
     }
     

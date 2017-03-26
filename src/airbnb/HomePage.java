@@ -26,6 +26,7 @@ class HomePage extends Page {
         println("5 = Show your reserves");
         println("6 = Visit you reserved houses");
         println("7 = Show your Visits");
+        println("8 = See you favorite houses.");
         
         int input = Integer.parseInt(getInput());
         
@@ -81,6 +82,15 @@ class HomePage extends Page {
         {
         	try {
 				User.printVisits(app.getCurrentUser().login, app.connection);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        else if (input == 8)
+        {
+        	try {
+				User.getFavorites(app.connection, app.getCurrentUser().login);
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

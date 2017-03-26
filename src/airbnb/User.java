@@ -215,4 +215,81 @@ public class User
     }
     
     
+    static public void RateFeedback(Connector con, int fid, String Login, int score) throws Exception
+    {
+    	//insert into Rates (fid,Login,rating) values (1,'joeyDD','2');
+    	String query;
+
+		query= "INSERT INTO Rates (fid, Login, rating) "+"VALUES (?, ?, ?);";
+		
+		try{
+			  PreparedStatement preparedStmt = con.con.prepareStatement(query);
+			  preparedStmt.setInt(1, fid);
+		      preparedStmt.setString (2, Login);
+		      preparedStmt.setInt (3, score);
+
+		      preparedStmt.execute();
+			 
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+    }
+    
+    static public void setHouseAsFavorite(Connector con, int hid, String Login) throws Exception
+    {
+    	String query;
+
+		query= "INSERT INTO Favorites (hid, Login, fvdate) "+"VALUES (?, ?, CURDATE());";
+		
+		try{
+			  PreparedStatement preparedStmt = con.con.prepareStatement(query);
+			  preparedStmt.setInt(1, hid);
+		      preparedStmt.setString (2, Login);
+
+		      preparedStmt.execute();
+			 
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+    }
+    
+    static public void getFavorites(Connector con, String Login) throws Exception
+    {
+    	//select fvdate, hid from Favorites where Login = 'joeyDD';
+    	String query;
+        ResultSet results;
+        query = "select fvdate, hid from Favorites where Login = '"+Login+"';";
+        try{
+            results = con.stmt.executeQuery(query);
+        } catch(Exception e) {
+            System.err.println("Unable to execute query:"+query+"\n");
+            System.err.println(e.getMessage());
+            throw(e);
+        }
+        if(!results.isBeforeFirst())
+        {
+            System.out.println("No Favorites.");
+        }
+        List<Favorite> favs = new ArrayList<Favorite>();
+        while(results.next())
+        {
+        	Favorite fav = new Favorite();
+        	fav.date = results.getString("fvdate");
+        	fav.hid = results.getInt("hid");
+        	favs.add(fav);
+        	
+        }
+        for(Favorite fav : favs)
+        {
+	    	String name = House.GetHouseNameByHid(fav.hid, con);
+	    	System.out.println("hid: "+ fav.hid+ " Name: " + name + " Date Favorited: "+ fav.date);
+        }
+
+    }
+    
+    
 }

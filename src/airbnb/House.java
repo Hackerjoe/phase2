@@ -422,6 +422,99 @@ class House {
 		}
 	}
 	
+	static boolean CheckForFeedback(Connector con, String Login, int Hid) throws Exception
+	{
+		String query;
+		ResultSet results;
+		query = "select * from Feedback where Login = '" +Login+"' and hid ="+Hid+";";
+		
+		try
+		{
+			results = con.stmt.executeQuery(query);
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+		if(!results.isBeforeFirst())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+	
+	static List<FeedBack> getFeedBackForHouse(Connector con, int Hid) throws Exception
+	{
+		String query;
+		ResultSet results;
+		List<FeedBack> returnList = new ArrayList<FeedBack>();
+		query = "select * from Feedback where hid ="+Hid+";";
+		
+		try
+		{
+			results = con.stmt.executeQuery(query);
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+		if(!results.isBeforeFirst())
+		{
+			return returnList;
+		}
+		else
+		{
+			while(results.next())
+			{
+				FeedBack newFeed = new FeedBack();
+				newFeed.date = results.getString("fbdate");
+				newFeed.fid = results.getInt("fid");
+				newFeed.hid = Hid;
+				newFeed.Login = results.getString("Login");
+				newFeed.message = results.getString("Text");
+				newFeed.score = results.getInt("Score");
+				returnList.add(newFeed);
+			}
+		}
+		return returnList;
+	}
+	
+	static void CreateFeedBack(Connector con, String Login, int Hid, String message,int Score) throws Exception
+	{
+		
+		if(CheckForFeedback(con, Login, Hid) == true)
+		{
+			Exception e = new Exception("Already gave feedback");
+			throw(e);
+			
+		}
+			
+		//insert into Feedback (hid,Login,fbdate,Text,Score) values ('1','joeyDD','2017-01-01','It was a place',10);
+		String query;
+
+		query= "insert into Feedback (hid,Login,fbdate,Text,Score) "+"VALUES (?, ?, CURDATE(), ?, ?);";
+		
+		try{
+			  PreparedStatement preparedStmt = con.con.prepareStatement(query);
+			  preparedStmt.setInt (1, Hid);
+		      preparedStmt.setString (2, Login);
+		      preparedStmt.setString (3, message);
+		      preparedStmt.setInt(4, Score);
+		      preparedStmt.execute();
+			 
+        } catch(Exception e) {
+			System.err.println("Unable to execute query:"+query+"\n");
+	                System.err.println(e.getMessage());
+			throw(e);
+		}
+		
+	}
+	
+	
+	
     
     
 //    public static House getHouseWithID(int id, Connector con) throws Exception {
